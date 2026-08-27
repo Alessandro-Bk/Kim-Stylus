@@ -1,7 +1,7 @@
 .pagina-servicos {
   min-height: 100vh;
   padding: 20px 16px 70px;
-  max-width: 480px;
+  max-width: 100%px;
   margin: 0 auto;
 }
 
