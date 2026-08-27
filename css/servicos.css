@@ -1,0 +1,126 @@
+.pagina-servicos {
+  min-height: 100vh;
+  padding: 20px 16px 70px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.topo h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.btn-sair {
+  background: transparent;
+  border: 1px solid #333;
+  color: var(--prata);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-sair:hover {
+  border-color: var(--dourado);
+  color: var(--dourado);
+}
+
+.menu-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  background: var(--preto-suave);
+  padding: 6px;
+  border-radius: 12px;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--prata-escuro);
+}
+
+.nav-item:hover {
+  color: var(--dourado);
+}
+
+.nav-item.ativo {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--dourado);
+  font-weight: 600;
+}
+
+.aviso {
+  font-size: 13px;
+  color: var(--prata-escuro);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.item-servico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+}
+
+.item-servico:last-child {
+  border-bottom: none;
+}
+
+.item-servico .nome {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--branco);
+}
+
+.item-servico input {
+  width: 90px;
+  padding: 8px 10px;
+  background: var(--preto-suave);
+  border: 1.5px solid #2a2a2a;
+  border-radius: 8px;
+  color: var(--dourado);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+  outline: none;
+}
+
+.item-servico input:focus {
+  border-color: var(--dourado);
+}
+
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1f1f1f;
+  border: 1px solid var(--dourado);
+  color: var(--dourado);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.toast.mostrar {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

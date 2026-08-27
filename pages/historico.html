@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histórico — Kim Stylus</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/historico.css" />
+  </head>
+  <body>
+    <div class="pagina-historico">
+      <div class="topo">
+        <h1>Histórico</h1>
+        <button class="btn-sair" id="btnSair">Sair</button>
+      </div>
+
+      <nav class="menu-nav">
+        <a href="registro.html" class="nav-item">Registrar</a>
+        <a href="servicos.html" class="nav-item">Serviços</a>
+        <a href="historico.html" class="nav-item ativo">Histórico</a>
+      </nav>
+
+      <div class="filtros">
+        <button class="filtro-btn ativo" data-periodo="dia">Dia</button>
+        <button class="filtro-btn" data-periodo="semana">Semana</button>
+        <button class="filtro-btn" data-periodo="mes">Mês</button>
+      </div>
+
+      <div class="seletor-data" id="seletorData">
+        <label for="dataEscolhida">Escolha o dia:</label>
+        <input type="date" id="dataEscolhida" />
+      </div>
+
+      <div class="seletor-data" id="seletorPeriodo">
+        <div class="periodo-linha">
+          <div>
+            <label for="dataInicio">De:</label>
+            <input type="date" id="dataInicio" />
+          </div>
+          <div>
+            <label for="dataFim">Até:</label>
+            <input type="date" id="dataFim" />
+          </div>
+        </div>
+      </div>
+
+      <div class="seletor-data" id="seletorMes">
+        <label for="mesEscolhido">Escolha o mês:</label>
+        <input type="month" id="mesEscolhido" />
+      </div>
+
+      <div class="card totais-card">
+        <div class="total-item">
+          <span>Total</span><strong id="totalGeral">R$ 0,00</strong>
+        </div>
+        <div class="total-item">
+          <span>Pix</span><strong id="totalPix">R$ 0,00</strong>
+        </div>
+        <div class="total-item">
+          <span>Dinheiro</span><strong id="totalDinheiro">R$ 0,00</strong>
+        </div>
+        <div class="total-item">
+          <span>Débito</span><strong id="totalDebito">R$ 0,00</strong>
+        </div>
+        <div class="total-item">
+          <span>Crédito</span><strong id="totalCredito">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <div class="secao-titulo" style="margin-top: 24px">Atendimentos</div>
+      <div class="card">
+        <div id="listaHistorico">
+          <div class="lista-vazia">Nenhum registro encontrado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="credito">Desenvolvido por Alessandro Brito</div>
+    <script src="../js/global.js"></script>
+    <script src="../js/historico.js"></script>
+  </body>
+</html>

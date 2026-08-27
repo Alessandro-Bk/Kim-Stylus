@@ -1,0 +1,123 @@
+:root {
+  --preto: #0d0d0d;
+  --preto-suave: #1a1a1a;
+  --preto-card: #161616;
+  --dourado: #d4af37;
+  --dourado-claro: #e8c547;
+  --dourado-escuro: #b8941f;
+  --prata: #c0c0c0;
+  --prata-escuro: #8a8a8a;
+  --branco: #ffffff;
+  --cinza-texto: #b0b0b0;
+  --radius: 12px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font);
+  background-color: var(--preto);
+  color: var(--branco);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--dourado);
+  text-decoration: none;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-dourado {
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-escuro));
+  color: var(--preto);
+}
+
+.btn-dourado:hover {
+  background: linear-gradient(135deg, var(--dourado-claro), var(--dourado));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--prata);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--preto-suave);
+  border: 1.5px solid #2a2a2a;
+  border-radius: 10px;
+  color: var(--branco);
+  font-size: 15px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--dourado);
+}
+
+.card {
+  background: var(--preto-card);
+  border: 1px solid #252525;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+}
+
+.credito {
+  position: fixed;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #444;
+  z-index: 10;
+}
+
+.msg-erro {
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid rgba(231, 76, 60, 0.4);
+  color: #ff8a80;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}

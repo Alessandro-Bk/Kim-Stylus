@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel — Kim Stylus</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/painel-pastor.css" />
+  </head>
+  <body>
+    <div class="pagina-pastor">
+      <div class="topo-pastor">
+        <div>
+          <div class="saudacao">Painel de controle</div>
+          <h1>Olá, <span class="nome" id="nomeUsuario">...</span></h1>
+        </div>
+        <button class="btn-sair" id="btnSair">Sair</button>
+      </div>
+
+      <nav class="menu-nav-pastor">
+        <a href="painel-pastor.html" class="nav-item ativo">Painel</a>
+        <a href="historico.html" class="nav-item">Histórico</a>
+        <a href="servicos.html" class="nav-item">Serviços</a>
+      </nav>
+
+      <div class="filtros-pastor">
+        <button class="filtro-pastor ativo" data-periodo="dia">Hoje</button>
+        <button class="filtro-pastor" data-periodo="semana">Semana</button>
+        <button class="filtro-pastor" data-periodo="mes">Mês</button>
+      </div>
+
+      <div class="resumo-geral">
+        <div class="label">Faturamento total</div>
+        <div class="valor-grande" id="faturamentoTotal">R$ 0,00</div>
+        <div class="resumo-pagamentos">
+          <div class="resumo-pag-item">
+            <span>Pix</span><strong id="resPix">R$ 0,00</strong>
+          </div>
+          <div class="resumo-pag-item">
+            <span>Dinheiro</span><strong id="resDinheiro">R$ 0,00</strong>
+          </div>
+          <div class="resumo-pag-item">
+            <span>Débito</span><strong id="resDebito">R$ 0,00</strong>
+          </div>
+          <div class="resumo-pag-item">
+            <span>Crédito</span><strong id="resCredito">R$ 0,00</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="secao-titulo-pastor">Barbeiros</div>
+      <div id="listaBarbeiros">
+        <div class="lista-vazia-pastor">Nenhum dado no período</div>
+      </div>
+    </div>
+
+    <div class="credito">Desenvolvido por Alessandro Brito</div>
+    <script src="../js/global.js"></script>
+    <script src="../js/painel-pastor.js"></script>
+  </body>
+</html>

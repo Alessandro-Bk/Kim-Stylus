@@ -1,0 +1,44 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 60px;
+  background: radial-gradient(ellipse at top, #1a1a1a 0%, #0d0d0d 70%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.login-card .subtitulo {
+  text-align: center;
+  font-size: 13px;
+  color: var(--prata-escuro);
+  margin-bottom: 28px;
+}
+
+.login-card .btn {
+  margin-top: 8px;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

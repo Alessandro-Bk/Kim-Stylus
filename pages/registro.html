@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro — Kim Stylus</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/registro.css" />
+  </head>
+  <body>
+    <div class="pagina-registro">
+      <div class="topo">
+        <h1>Bem vindo, <span class="nome" id="nomeUsuario">...</span></h1>
+        <button class="btn-sair" id="btnSair">Sair</button>
+      </div>
+
+      <nav class="menu-nav">
+        <a href="registro.html" class="nav-item ativo">Registrar</a>
+        <a href="servicos.html" class="nav-item">Serviços</a>
+        <a href="historico.html" class="nav-item">Histórico</a>
+      </nav>
+
+      <div class="card">
+        <div class="secao">
+          <div class="secao-titulo">Serviços realizados</div>
+          <div class="servicos-grid" id="servicosGrid"></div>
+        </div>
+
+        <div class="secao">
+          <div class="secao-titulo">Valor total (pode alterar manualmente)</div>
+          <input
+            type="text"
+            class="input-valor"
+            id="valor"
+            placeholder="R$ 0,00"
+            inputmode="decimal"
+          />
+        </div>
+
+        <div class="secao">
+          <div class="secao-titulo">Forma de pagamento</div>
+          <div class="pagamentos-grid">
+            <button type="button" class="pag-btn" data-pag="Pix">Pix</button>
+            <button type="button" class="pag-btn" data-pag="Dinheiro">
+              Dinheiro
+            </button>
+            <button type="button" class="pag-btn" data-pag="Débito">
+              Débito
+            </button>
+            <button type="button" class="pag-btn" data-pag="Crédito">
+              Crédito
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-dourado btn-registrar"
+          id="btnRegistrar"
+        >
+          Registrar atendimento
+        </button>
+      </div>
+
+      <div class="total-dia" style="margin-top: 24px">
+        <span>Total de hoje</span>
+        <span id="totalDia">R$ 0,00</span>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="credito">Desenvolvido por Alessandro Brito</div>
+
+    <script src="../js/global.js"></script>
+    <script src="../js/registro.js"></script>
+  </body>
+</html>

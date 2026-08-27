@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serviços — Kim Stylus</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/servicos.css" />
+  </head>
+  <body>
+    <div class="pagina-servicos">
+      <div class="topo">
+        <h1>Serviços e Preços</h1>
+        <button class="btn-sair" id="btnSair">Sair</button>
+      </div>
+
+      <nav class="menu-nav">
+        <a href="registro.html" class="nav-item">Registrar</a>
+        <a href="servicos.html" class="nav-item ativo">Serviços</a>
+        <a href="historico.html" class="nav-item">Histórico</a>
+      </nav>
+
+      <div class="card">
+        <p class="aviso">
+          Aqui você pode alterar o valor de qualquer serviço. A mudança vale
+          para todos.
+        </p>
+        <div id="listaServicos"></div>
+        <button
+          type="button"
+          class="btn btn-dourado"
+          id="btnSalvar"
+          style="margin-top: 20px"
+        >
+          Salvar alterações
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="credito">Desenvolvido por Alessandro Brito</div>
+
+    <script src="../js/global.js"></script>
+    <script src="../js/servicos.js"></script>
+  </body>
+</html>
