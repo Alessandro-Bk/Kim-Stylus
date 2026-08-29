@@ -7,8 +7,6 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Kim Stylus — Login</title>
-
-    <!-- PWA / iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
@@ -17,8 +15,6 @@
     <meta name="apple-mobile-web-app-title" content="Kim Stylus" />
     <meta name="theme-color" content="#0d0d0d" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" href="assets/images/logo-kim-stylus.png" />
-
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/login.css" />
   </head>
@@ -27,9 +23,7 @@
       <div class="card login-card">
         <h1>Bem-vindo</h1>
         <p class="subtitulo">Acesse sua conta para continuar</p>
-
         <div id="msgErro" class="msg-erro hidden"></div>
-
         <form id="formLogin">
           <div class="form-group">
             <label for="usuario">Usuário</label>
@@ -41,7 +35,6 @@
               required
             />
           </div>
-
           <div class="form-group">
             <label for="senha">Senha</label>
             <input
@@ -52,19 +45,18 @@
               required
             />
           </div>
-
           <button type="submit" class="btn btn-dourado">Entrar</button>
         </form>
       </div>
     </div>
-
     <div class="credito">Desenvolvido por Alessandro Brito</div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase.js"></script>
     <script src="js/global.js"></script>
     <script src="js/login.js"></script>
-
     <script>
-      // Registra o Service Worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").catch(function (err) {
           console.log("SW erro:", err);

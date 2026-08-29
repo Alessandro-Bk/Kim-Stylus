@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   carregarHistorico(sessao);
+  limparRegistrosAntigos();
 });
 
 function filtrarPorPeriodo(registros) {
@@ -112,115 +113,133 @@ function filtrarPorPeriodo(registros) {
 }
 
 function carregarHistorico(sessao) {
-  const todos = JSON.parse(localStorage.getItem("registros")) || [];
-  let filtrados = filtrarPorPeriodo(todos);
+  db.collection("registros")
+    .get()
+    .then((snapshot) => {
+      let todos = [];
+      snapshot.forEach((doc) => {
+        const r = doc.data();
+        r.id = doc.id;
+        todos.push(r);
+      });
 
-  if (sessao.role === "barbeiro") {
-    filtrados = filtrados.filter((r) => r.barbeiro === sessao.nome);
-  }
+      let filtrados = filtrarPorPeriodo(todos);
 
-  let totalGeral = 0,
-    totalPix = 0,
-    totalDinheiro = 0,
-    totalDebito = 0,
-    totalCredito = 0;
+      if (sessao.role === "barbeiro") {
+        filtrados = filtrados.filter((r) => r.barbeiro === sessao.nome);
+      }
 
-  filtrados.forEach((r) => {
-    const v = Number(r.valor) || 0;
-    totalGeral += v;
-    const pag = (r.pagamento || "").toLowerCase();
-    if (pag === "pix") totalPix += v;
-    else if (pag === "dinheiro") totalDinheiro += v;
-    else if (pag === "débito" || pag === "debito") totalDebito += v;
-    else if (pag === "crédito" || pag === "credito") totalCredito += v;
-  });
+      let totalGeral = 0,
+        totalPix = 0,
+        totalDinheiro = 0,
+        totalDebito = 0,
+        totalCredito = 0;
 
-  document.getElementById("totalGeral").textContent = formatarMoeda(totalGeral);
-  document.getElementById("totalPix").textContent = formatarMoeda(totalPix);
-  document.getElementById("totalDinheiro").textContent =
-    formatarMoeda(totalDinheiro);
-  document.getElementById("totalDebito").textContent =
-    formatarMoeda(totalDebito);
-  document.getElementById("totalCredito").textContent =
-    formatarMoeda(totalCredito);
+      filtrados.forEach((r) => {
+        const v = Number(r.valor) || 0;
+        totalGeral += v;
+        const pag = (r.pagamento || "").toLowerCase();
+        if (pag === "pix") totalPix += v;
+        else if (pag === "dinheiro") totalDinheiro += v;
+        else if (pag === "débito" || pag === "debito") totalDebito += v;
+        else if (pag === "crédito" || pag === "credito") totalCredito += v;
+      });
 
-  const lista = document.getElementById("listaHistorico");
+      document.getElementById("totalGeral").textContent =
+        formatarMoeda(totalGeral);
+      document.getElementById("totalPix").textContent = formatarMoeda(totalPix);
+      document.getElementById("totalDinheiro").textContent =
+        formatarMoeda(totalDinheiro);
+      document.getElementById("totalDebito").textContent =
+        formatarMoeda(totalDebito);
+      document.getElementById("totalCredito").textContent =
+        formatarMoeda(totalCredito);
 
-  if (filtrados.length === 0) {
-    lista.innerHTML = `<div class="lista-vazia">Nenhum registro encontrado</div>`;
-    return;
-  }
+      const lista = document.getElementById("listaHistorico");
 
-  if (sessao.role === "pastor") {
-    const porBarbeiro = {};
-    filtrados.forEach((r) => {
-      if (!porBarbeiro[r.barbeiro]) porBarbeiro[r.barbeiro] = [];
-      porBarbeiro[r.barbeiro].push(r);
-    });
+      if (filtrados.length === 0) {
+        lista.innerHTML = `<div class="lista-vazia">Nenhum registro encontrado</div>`;
+        return;
+      }
 
-    lista.innerHTML = "";
+      if (sessao.role === "pastor") {
+        const porBarbeiro = {};
+        filtrados.forEach((r) => {
+          if (!porBarbeiro[r.barbeiro]) porBarbeiro[r.barbeiro] = [];
+          porBarbeiro[r.barbeiro].push(r);
+        });
 
-    Object.keys(porBarbeiro)
-      .sort()
-      .forEach((nome) => {
-        const regs = porBarbeiro[nome].sort((a, b) => b.id - a.id);
-        const totalBarbeiro = regs.reduce((s, r) => s + Number(r.valor), 0);
+        lista.innerHTML = "";
 
-        const itensHtml = regs
-          .map(
-            (r) => `
+        Object.keys(porBarbeiro)
+          .sort()
+          .forEach((nome) => {
+            const regs = porBarbeiro[nome].sort((a, b) =>
+              (b.data || "").localeCompare(a.data || ""),
+            );
+            const totalBarbeiro = regs.reduce((s, r) => s + Number(r.valor), 0);
+
+            const itensHtml = regs
+              .map(
+                (r) => `
+            <div class="item-registro">
+              <div class="item-info">
+                <div class="item-servicos">${(r.servicos || []).join(" + ")}</div>
+                <div class="item-meta">${r.dataBR} • ${r.hora} • ${r.pagamento}</div>
+              </div>
+              <div class="item-valor">${formatarMoeda(r.valor)}</div>
+            </div>
+          `,
+              )
+              .join("");
+
+            const card = document.createElement("div");
+            card.className = "hist-barbeiro-card";
+            card.innerHTML = `
+            <div class="hist-barbeiro-header">
+              <div>
+                <div class="hist-barbeiro-nome">${nome}</div>
+                <div class="hist-barbeiro-sub">${regs.length} atendimento${regs.length !== 1 ? "s" : ""}</div>
+              </div>
+              <div class="hist-barbeiro-direita">
+                <div class="hist-barbeiro-total">${formatarMoeda(totalBarbeiro)}</div>
+                <div class="seta">▼</div>
+              </div>
+            </div>
+            <div class="hist-barbeiro-detalhe">
+              <div class="hist-detalhe-conteudo">${itensHtml}</div>
+            </div>
+          `;
+
+            card
+              .querySelector(".hist-barbeiro-header")
+              .addEventListener("click", () => {
+                card.classList.toggle("aberto");
+              });
+
+            lista.appendChild(card);
+          });
+        return;
+      }
+
+      filtrados.sort((a, b) => (b.data || "").localeCompare(a.data || ""));
+      lista.innerHTML = filtrados
+        .map(
+          (r) => `
         <div class="item-registro">
           <div class="item-info">
-            <div class="item-servicos">${r.servicos.join(" + ")}</div>
+            <div class="item-servicos">${(r.servicos || []).join(" + ")}</div>
             <div class="item-meta">${r.dataBR} • ${r.hora} • ${r.pagamento}</div>
           </div>
           <div class="item-valor">${formatarMoeda(r.valor)}</div>
         </div>
       `,
-          )
-          .join("");
-
-        const card = document.createElement("div");
-        card.className = "hist-barbeiro-card";
-        card.innerHTML = `
-        <div class="hist-barbeiro-header">
-          <div>
-            <div class="hist-barbeiro-nome">${nome}</div>
-            <div class="hist-barbeiro-sub">${regs.length} atendimento${regs.length !== 1 ? "s" : ""}</div>
-          </div>
-          <div class="hist-barbeiro-direita">
-            <div class="hist-barbeiro-total">${formatarMoeda(totalBarbeiro)}</div>
-            <div class="seta">▼</div>
-          </div>
-        </div>
-        <div class="hist-barbeiro-detalhe">
-          <div class="hist-detalhe-conteudo">${itensHtml}</div>
-        </div>
-      `;
-
-        card
-          .querySelector(".hist-barbeiro-header")
-          .addEventListener("click", () => {
-            card.classList.toggle("aberto");
-          });
-
-        lista.appendChild(card);
-      });
-    return;
-  }
-
-  filtrados.sort((a, b) => b.id - a.id);
-  lista.innerHTML = filtrados
-    .map(
-      (r) => `
-    <div class="item-registro">
-      <div class="item-info">
-        <div class="item-servicos">${r.servicos.join(" + ")}</div>
-        <div class="item-meta">${r.dataBR} • ${r.hora} • ${r.pagamento}</div>
-      </div>
-      <div class="item-valor">${formatarMoeda(r.valor)}</div>
-    </div>
-  `,
-    )
-    .join("");
+        )
+        .join("");
+    })
+    .catch((erro) => {
+      console.error(erro);
+      document.getElementById("listaHistorico").innerHTML =
+        `<div class="lista-vazia">Erro ao carregar. Tente de novo.</div>`;
+    });
 }

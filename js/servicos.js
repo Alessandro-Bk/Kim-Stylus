@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function carregarLista() {
   let servicos = JSON.parse(localStorage.getItem("servicos"));
+
   if (!servicos || servicos.length === 0) {
     servicos = [
       { nome: "Máquina", valor: 20 },

@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   atualizarTotalDoDia(sessao.nome);
+  limparRegistrosAntigos();
 });
 
 function montarServicos() {
@@ -108,7 +109,6 @@ function registrarAtendimento(sessao) {
 
   const agora = new Date();
   const registro = {
-    id: Date.now(),
     barbeiro: sessao.nome,
     usuario: sessao.usuario,
     servicos: servicosSelecionados.map((s) => s.nome),
@@ -120,15 +120,20 @@ function registrarAtendimento(sessao) {
       hour: "2-digit",
       minute: "2-digit",
     }),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   };
 
-  const registros = JSON.parse(localStorage.getItem("registros")) || [];
-  registros.push(registro);
-  localStorage.setItem("registros", JSON.stringify(registros));
-
-  limparFormulario();
-  atualizarTotalDoDia(sessao.nome);
-  mostrarToast("Registrado com sucesso!");
+  db.collection("registros")
+    .add(registro)
+    .then(() => {
+      limparFormulario();
+      atualizarTotalDoDia(sessao.nome);
+      mostrarToast("Registrado com sucesso!");
+    })
+    .catch((erro) => {
+      console.error(erro);
+      mostrarToast("Erro ao salvar. Tente de novo.");
+    });
 }
 
 function limparFormulario() {
@@ -144,13 +149,24 @@ function limparFormulario() {
 }
 
 function atualizarTotalDoDia(nomeBarbeiro) {
-  const registros = JSON.parse(localStorage.getItem("registros")) || [];
   const hoje = new Date().toLocaleDateString("pt-BR");
-  const doDia = registros.filter(
-    (r) => r.barbeiro === nomeBarbeiro && r.dataBR === hoje,
-  );
-  const total = doDia.reduce((soma, r) => soma + Number(r.valor), 0);
-  document.getElementById("totalDia").textContent = formatarMoeda(total);
+
+  db.collection("registros")
+    .get()
+    .then((snapshot) => {
+      let total = 0;
+      snapshot.forEach((doc) => {
+        const r = doc.data();
+        if (r.barbeiro === nomeBarbeiro && r.dataBR === hoje) {
+          total += Number(r.valor) || 0;
+        }
+      });
+      document.getElementById("totalDia").textContent = formatarMoeda(total);
+    })
+    .catch((erro) => {
+      console.error(erro);
+      document.getElementById("totalDia").textContent = "R$ 0,00";
+    });
 }
 
 function mostrarToast(mensagem) {
