@@ -1,5 +1,6 @@
 const BARBEIROS = ["Mayk", "Mateus"];
 let periodoAtual = "dia";
+let unsubscribePainel = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const sessao = protegerPagina(["pastor"]);
@@ -8,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("nomeUsuario").textContent = sessao.nome;
 
   document.getElementById("btnSair").addEventListener("click", () => {
+    if (unsubscribePainel) unsubscribePainel();
     limparSessao();
     window.location.href = "../index.html";
   });
@@ -54,9 +56,10 @@ function filtrarPorPeriodo(registros) {
 }
 
 function carregarPainel() {
-  db.collection("registros")
-    .get()
-    .then((snapshot) => {
+  if (unsubscribePainel) unsubscribePainel();
+
+  unsubscribePainel = db.collection("registros").onSnapshot(
+    (snapshot) => {
       const todos = [];
       snapshot.forEach((doc) => {
         const r = doc.data();
@@ -157,10 +160,11 @@ function carregarPainel() {
       if (!temDados && filtrados.length === 0) {
         container.innerHTML = `<div class="lista-vazia-pastor">Nenhum atendimento neste período</div>`;
       }
-    })
-    .catch((erro) => {
+    },
+    (erro) => {
       console.error(erro);
       document.getElementById("listaBarbeiros").innerHTML =
         `<div class="lista-vazia-pastor">Erro ao carregar dados</div>`;
-    });
+    },
+  );
 }

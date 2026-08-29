@@ -3,6 +3,8 @@ let dataEscolhida = null;
 let mesEscolhido = null;
 let dataInicio = null;
 let dataFim = null;
+let unsubscribeHistorico = null;
+let sessaoAtual = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const sessao = obterSessao();
@@ -10,8 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "../index.html";
     return;
   }
+  sessaoAtual = sessao;
 
   document.getElementById("btnSair").addEventListener("click", () => {
+    if (unsubscribeHistorico) unsubscribeHistorico();
     limparSessao();
     window.location.href = "../index.html";
   });
@@ -45,22 +49,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   inputData.addEventListener("change", () => {
     dataEscolhida = inputData.value;
-    carregarHistorico(sessao);
+    carregarHistorico();
   });
 
   inputMes.addEventListener("change", () => {
     mesEscolhido = inputMes.value;
-    carregarHistorico(sessao);
+    carregarHistorico();
   });
 
   inputInicio.addEventListener("change", () => {
     dataInicio = inputInicio.value;
-    carregarHistorico(sessao);
+    carregarHistorico();
   });
 
   inputFim.addEventListener("change", () => {
     dataFim = inputFim.value;
-    carregarHistorico(sessao);
+    carregarHistorico();
   });
 
   document.querySelectorAll(".filtro-btn").forEach((btn) => {
@@ -82,11 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (periodoAtual === "mes")
         document.getElementById("seletorMes").classList.add("mostrar");
 
-      carregarHistorico(sessao);
+      carregarHistorico();
     });
   });
 
-  carregarHistorico(sessao);
+  carregarHistorico();
   limparRegistrosAntigos();
 });
 
@@ -112,10 +116,11 @@ function filtrarPorPeriodo(registros) {
   });
 }
 
-function carregarHistorico(sessao) {
-  db.collection("registros")
-    .get()
-    .then((snapshot) => {
+function carregarHistorico() {
+  if (unsubscribeHistorico) unsubscribeHistorico();
+
+  unsubscribeHistorico = db.collection("registros").onSnapshot(
+    (snapshot) => {
       let todos = [];
       snapshot.forEach((doc) => {
         const r = doc.data();
@@ -125,8 +130,8 @@ function carregarHistorico(sessao) {
 
       let filtrados = filtrarPorPeriodo(todos);
 
-      if (sessao.role === "barbeiro") {
-        filtrados = filtrados.filter((r) => r.barbeiro === sessao.nome);
+      if (sessaoAtual.role === "barbeiro") {
+        filtrados = filtrados.filter((r) => r.barbeiro === sessaoAtual.nome);
       }
 
       let totalGeral = 0,
@@ -162,7 +167,7 @@ function carregarHistorico(sessao) {
         return;
       }
 
-      if (sessao.role === "pastor") {
+      if (sessaoAtual.role === "pastor") {
         const porBarbeiro = {};
         filtrados.forEach((r) => {
           if (!porBarbeiro[r.barbeiro]) porBarbeiro[r.barbeiro] = [];
@@ -236,10 +241,11 @@ function carregarHistorico(sessao) {
       `,
         )
         .join("");
-    })
-    .catch((erro) => {
+    },
+    (erro) => {
       console.error(erro);
       document.getElementById("listaHistorico").innerHTML =
         `<div class="lista-vazia">Erro ao carregar. Tente de novo.</div>`;
-    });
+    },
+  );
 }

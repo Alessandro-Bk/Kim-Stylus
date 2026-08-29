@@ -1,5 +1,6 @@
 let servicosSelecionados = [];
 let formaPagamento = null;
+let unsubscribeTotal = null;
 
 function carregarServicos() {
   let servicos = JSON.parse(localStorage.getItem("servicos"));
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("nomeUsuario").textContent = sessao.nome;
 
   document.getElementById("btnSair").addEventListener("click", () => {
+    if (unsubscribeTotal) unsubscribeTotal();
     limparSessao();
     window.location.href = "../index.html";
   });
@@ -127,7 +129,6 @@ function registrarAtendimento(sessao) {
     .add(registro)
     .then(() => {
       limparFormulario();
-      atualizarTotalDoDia(sessao.nome);
       mostrarToast("Registrado com sucesso!");
     })
     .catch((erro) => {
@@ -149,11 +150,12 @@ function limparFormulario() {
 }
 
 function atualizarTotalDoDia(nomeBarbeiro) {
+  if (unsubscribeTotal) unsubscribeTotal();
+
   const hoje = new Date().toLocaleDateString("pt-BR");
 
-  db.collection("registros")
-    .get()
-    .then((snapshot) => {
+  unsubscribeTotal = db.collection("registros").onSnapshot(
+    (snapshot) => {
       let total = 0;
       snapshot.forEach((doc) => {
         const r = doc.data();
@@ -162,11 +164,12 @@ function atualizarTotalDoDia(nomeBarbeiro) {
         }
       });
       document.getElementById("totalDia").textContent = formatarMoeda(total);
-    })
-    .catch((erro) => {
+    },
+    (erro) => {
       console.error(erro);
       document.getElementById("totalDia").textContent = "R$ 0,00";
-    });
+    },
+  );
 }
 
 function mostrarToast(mensagem) {
